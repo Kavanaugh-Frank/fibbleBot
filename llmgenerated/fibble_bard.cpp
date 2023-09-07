@@ -3,48 +3,6 @@
 
 using namespace std;
 
-int main() {
-  // Generate a random five-letter word.
-  string word = generate_random_word();
-
-  // Create a clue for the word.
-  string clue = generate_clue(word);
-
-  // Start the game loop.
-  int guesses = 0;
-  while (guesses < 8) {
-    // Get the player's guess.
-    string guess;
-    cin >> guess;
-
-    // Check the guess.
-    bool correct = check_guess(guess, word);
-
-    // Update the clue.
-    clue = update_clue(clue, guess, correct);
-
-    // Print the clue.
-    cout << clue << endl;
-
-    // Increment the number of guesses.
-    guesses++;
-
-    // If the player has guessed the correct word, break out of the loop.
-    if (correct) {
-      break;
-    }
-  }
-
-  // If the player has run out of guesses, print a message and end the game.
-  if (guesses == 8) {
-    cout << "You lose!" << endl;
-  } else {
-    cout << "You win!" << endl;
-  }
-
-  return 0;
-}
-
 // Generate a random five-letter word.
 string generate_random_word() {
   string alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -56,9 +14,9 @@ string generate_random_word() {
 }
 
 // Generate a clue for the word.
-string generate_clue(string word) {
+string generate_clue(string word, int &lie_index) {
   // One of the letters in the word is a lie.
-  int lie_index = rand() % 5;
+  lie_index = rand() % 5;
 
   // Create a clue with the lie.
   string clue = word;
@@ -85,7 +43,7 @@ bool check_guess(string guess, string word) {
 }
 
 // Update the clue based on the player's guess.
-string update_clue(string clue, string guess, bool correct) {
+string update_clue(string clue, string guess, bool correct, int lie_index) {
   // If the guess is correct, remove the lie from the clue.
   if (correct) {
     clue[lie_index] = guess[lie_index];
@@ -97,4 +55,47 @@ string update_clue(string clue, string guess, bool correct) {
   }
 
   return clue;
+}
+
+int main() {
+  int lie_index;
+  // Generate a random five-letter word.
+  string word = generate_random_word();
+
+  // Create a clue for the word.
+  string clue = generate_clue(word, lie_index);
+
+  // Start the game loop.
+  int guesses = 0;
+  while (guesses < 8) {
+    // Get the player's guess.
+    string guess;
+    cin >> guess;
+
+    // Check the guess.
+    bool correct = check_guess(guess, word);
+
+    // Update the clue.
+    clue = update_clue(clue, guess, correct, lie_index);
+
+    // Print the clue.
+    cout << clue << endl << endl;
+
+    // Increment the number of guesses.
+    guesses++;
+
+    // If the player has guessed the correct word, break out of the loop.
+    if (correct) {
+      break;
+    }
+  }
+
+  // If the player has run out of guesses, print a message and end the game.
+  if (guesses == 8) {
+    cout << "You lose!" << endl;
+  } else {
+    cout << "You win!" << endl;
+  }
+
+  return 0;
 }
