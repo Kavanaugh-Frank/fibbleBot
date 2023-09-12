@@ -4,6 +4,6 @@
 int main(){
     Fibble game;
     game.test();
-
+    game.test();
     return 0;
 }
